@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Calcite Shell with Map</title>
+
+    <!-- Calcite Components -->
+    <script type="module" src="https://js.arcgis.com/calcite-components/2.13.0/calcite.esm.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.13.0/calcite.css">
+
+    <!-- ArcGIS API for JavaScript -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.30/"></script>
+
+    <style>
+        body {
+            direction: rtl;
+            text-align: right;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        calcite-shell {
+            height: 100vh;
+        }
+
+        calcite-navigation-logo {
+            font-weight: bold;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <calcite-shell>
+        <!-- Header: Top navigation area -->
+        <calcite-navigation slot="header">
+            <calcite-navigation-user slot="logo" full-name="محمد خطیبیان" username="مدیر" thumbnail="C:\Users\shahrsazi141\source\repos\NewWebGISPage\Muhammad.jpg"></calcite-navigation-user>
+            <calcite-navigation-logo slot="logo" heading="تحلیل گران آمارد"></calcite-navigation-logo>
+            <calcite-menu slot="content-end">
+                <calcite-menu-item text="باز نشانی" icon-start="refresh"></calcite-menu-item>
+            </calcite-menu>
+            <calcite-navigation-user slot="user" full-name="ـحلیل گران آمارد" username="دمو" thumbnail="C:\Users\shahrsazi141\source\repos\NewWebGISPage\Amard.png"></calcite-navigation-user>
+        </calcite-navigation>
+        <!-- Left Panel -->
+        <calcite-shell-panel slot="panel-start" position="start" id="shell-panel-start" collapsed>
+            <calcite-action-bar slot="action-bar">
+                <calcite-action text="Save" icon="save" aria-label="Save"></calcite-action>
+                <calcite-action text="Map" icon="map" aria-label="Map"></calcite-action>
+                <calcite-action text="Layer" icon="layer" aria-label="Layer"></calcite-action>
+            </calcite-action-bar>
+            <calcite-panel heading="Map" id="panel-start" closable closed>
+                <calcite-block heading="Block 1" collapsible></calcite-block>
+            </calcite-panel>
+        </calcite-shell-panel>
+
+        <!-- Right Panel -->
+        <calcite-shell-panel slot="panel-end" position="end" id="shell-panel-end" collapsed>
+            <calcite-action-bar slot="action-bar">
+                <calcite-action text="Layer" icon="sliders-horizontal" aria-label="Layer"></calcite-action>
+                <calcite-action text="Styles" icon="shapes" aria-label="Styles"></calcite-action>
+                <calcite-action text="Filter" icon="layer-filter" aria-label="Filter"></calcite-action>
+                <calcite-action text="Configure" icon="popup" aria-label="Configure"></calcite-action>
+            </calcite-action-bar>
+            <calcite-panel heading id="panel-end" closable closed>
+                <calcite-block heading="Block 1" collapsible></calcite-block>
+            </calcite-panel>
+        </calcite-shell-panel>
+
+        <!-- Main Content with Map
+        <calcite-panel >
+            <div id="map"></div>
+        </calcite-panel>-->
+        <!-- Main Content Area: Where the map or primary content goes -->
+    </calcite-shell>
+
+    <script>
+        // Initialize the map and view
+        require(["esri/Map", "esri/views/MapView"], function (Map, MapView) {
+            const map = new Map({
+                basemap: "streets-navigation-vector" // Options: topo, streets, satellite, etc.
+            });
+
+            const view = new MapView({
+                container: "map", // Div element to display the map
+                map: map,
+                center: [-118.80543, 34.02700], // Longitude, latitude
+                zoom: 13
+            });
+        });
+
+        // References to shell panels and actions
+        const shellPanelStart = document.getElementById("shell-panel-start");
+        const shellPanelEnd = document.getElementById("shell-panel-end");
+        const panelStart = document.getElementById("panel-start");
+        const panelEnd = document.getElementById("panel-end");
+
+        const actionsStart = shellPanelStart?.querySelectorAll("calcite-action");
+        const actionsEnd = shellPanelEnd?.querySelectorAll("calcite-action");
+
+        // Set the first action as active by default
+        if (actionsStart?.length) actionsStart[0].active = true;
+        if (actionsEnd?.length) actionsEnd[0].active = true;
+
+        // Add click listeners for start panel actions
+        actionsStart?.forEach(el => {
+            el.addEventListener("click", function () {
+                if (el.active) return; // Prevent unnecessary toggling
+                actionsStart?.forEach(action => (action.active = false));
+                el.active = true; // Set the clicked action as active
+                shellPanelStart.collapsed = false; // Expand panel
+                panelStart.closed = false; // Open panel
+                panelStart.heading = el.text; // Update heading
+            });
+        });
+
+        // Close the end panel when the close event is triggered
+        panelEnd?.addEventListener("calcitePanelClose", function () {
+            actionsEnd?.forEach(action => (action.active = false));
+            shellPanelEnd.collapsed = true;
+        });
+
+        // Add click listeners for end panel actions
+        actionsEnd?.forEach(el => {
+            el.addEventListener("click", function () {
+                if (el.active) return; // Prevent unnecessary toggling
+                actionsEnd?.forEach(action => (action.active = false));
+                el.active = true; // Set the clicked action as active
+                shellPanelEnd.collapsed = false; // Expand panel
+                panelEnd.closed = false; // Open panel
+                panelEnd.heading = el.text; // Update heading
+            });
+        });
+    </script>
+</body>
+
+</html>
