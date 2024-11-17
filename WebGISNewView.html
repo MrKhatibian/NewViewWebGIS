@@ -15,9 +15,7 @@
     <script src="https://js.arcgis.com/4.30/"></script>
 
     <style>
-        body {
-            direction: rtl;
-            text-align: right;
+        body {            
             margin: 0;
             font-family: Arial, sans-serif;
             height: 100vh;
@@ -28,11 +26,10 @@
         calcite-shell {
             height: 100vh;
         }
-
-        calcite-navigation-logo {
-            font-weight: bold;
+        calcite-navigation {
+            direction: rtl;
+            text-align: right
         }
-
         #map {
             width: 100%;
             height: 100%;
@@ -44,12 +41,11 @@
     <calcite-shell>
         <!-- Header: Top navigation area -->
         <calcite-navigation slot="header">
-            <calcite-navigation-user slot="logo" full-name="محمد خطیبیان" username="مدیر" thumbnail="C:\Users\shahrsazi141\source\repos\NewWebGISPage\Muhammad.jpg"></calcite-navigation-user>
-            <calcite-navigation-logo slot="logo" heading="تحلیل گران آمارد"></calcite-navigation-logo>
+            <calcite-navigation-user slot="logo" full-name="تحلیل گران آمارد" username="دمو" thumbnail="./Amard.png"></calcite-navigation-user>
+            <calcite-navigation-user slot="user" full-name="محمد خطیبیان" username="مدیر" thumbnail="./Muhammad.jpg"></calcite-navigation-user>            
             <calcite-menu slot="content-end">
                 <calcite-menu-item text="باز نشانی" icon-start="refresh"></calcite-menu-item>
             </calcite-menu>
-            <calcite-navigation-user slot="user" full-name="ـحلیل گران آمارد" username="دمو" thumbnail="C:\Users\shahrsazi141\source\repos\NewWebGISPage\Amard.png"></calcite-navigation-user>
         </calcite-navigation>
         <!-- Left Panel -->
         <calcite-shell-panel slot="panel-start" position="start" id="shell-panel-start" collapsed>
@@ -87,7 +83,7 @@
         // Initialize the map and view
         require(["esri/Map", "esri/views/MapView"], function (Map, MapView) {
             const map = new Map({
-                basemap: "streets-navigation-vector" // Options: topo, streets, satellite, etc.
+                basemap: "osm" // Options: topo, streets, satellite, etc.
             });
 
             const view = new MapView({
